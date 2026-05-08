@@ -1,272 +1,278 @@
-<style>
-:root {
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
-  --facility: #10b981;
-  --purok: #3b82f6;
-  --danger: #ef4444;
-  --bg-main: #f8fafc;
-  --card-bg: #ffffff;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  --radius: 12px;
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Nurcia - Shortest Path Finder</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --facility: #10b981;
+            --purok: #3b82f6;
+            --danger: #ef4444;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
 
-* { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
 
-body { 
-  font-family: 'Inter', system-ui, -apple-system, sans-serif; 
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  padding: 2rem;
-}
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 2rem;
+        }
 
-.app-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 24px;
-}
+        .app-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+        }
 
-header {
-  grid-column: 1 / -1;
-  margin-bottom: 8px;
-}
+        header {
+            grid-column: 1 / -1;
+            margin-bottom: 8px;
+        }
 
-header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
-header p { color: var(--text-muted); font-size: 0.9rem; }
+        header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
+        header p { color: var(--text-muted); font-size: 0.9rem; }
 
-/* Map Area */
-.map-card {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  position: relative;
-}
+        .map-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
 
-#graph-svg {
-  width: 100%;
-  height: auto;
-  display: block;
-  background-image: radial-gradient(var(--border) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
+        #graph-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
 
-/* Sidebar Panels */
-.panel {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-  margin-bottom: 1rem;
-}
+        .panel {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
 
-.panel-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+        .panel-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
 
-/* Controls */
-.control-group { margin-bottom: 1rem; }
-label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; color: var(--text-muted); }
+        .control-group { margin-bottom: 1rem; }
+        label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; color: var(--text-muted); }
 
-select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background-color: white;
-  font-size: 0.9rem;
-  outline: none;
-}
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: white;
+            font-size: 0.9rem;
+            outline: none;
+        }
 
-select:focus { border-color: var(--primary); ring: 2px var(--primary); }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+        }
 
-.btn {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-}
+        .btn-primary { background: var(--primary); color: white; margin-bottom: 8px; }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
 
-.btn-primary { background: var(--primary); color: white; margin-bottom: 8px; }
-.btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-secondary { background: #f1f5f9; color: var(--text-muted); }
 
-.btn-secondary { background: #f1f5f9; color: var(--text-muted); }
-.btn-secondary:hover { background: #e2e8f0; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
 
-/* Stats */
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-}
+        .stat-card {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
 
-.stat-card {
-  background: #f8fafc;
-  padding: 12px;
-  border-radius: 8px;
-  text-align: center;
-}
+        .stat-val { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+        .stat-lbl { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; }
 
-.stat-val { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
-.stat-lbl { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; }
+        .path-stepper {
+            border-left: 2px dashed var(--border);
+            margin-left: 10px;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-.path-stepper {
-  border-left: 2px dashed var(--border);
-  margin-left: 10px;
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+        .step { position: relative; font-size: 0.85rem; font-weight: 500; }
+        .step::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+        }
 
-.step { position: relative; font-size: 0.85rem; font-weight: 500; }
-.step::before {
-  content: '';
-  position: absolute;
-  left: -26px;
-  top: 4px;
-  width: 10px;
-  height: 10px;
-  background: white;
-  border: 2px solid var(--primary);
-  border-radius: 50%;
-}
+        .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.75rem; }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
 
-/* Legend */
-.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.75rem; }
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; }
-
-/* Graph Interaction */
-.node-group { cursor: pointer; }
-.node-group:hover circle { filter: brightness(1.1); stroke-width: 3px; }
-</style>
+        .node-group { cursor: pointer; }
+        
+        @media (max-width: 850px) {
+            .app-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
 
 <header>
-  <h1>Optimizing Waste Collection Routes in Barangay Nurcia, Lanuza, Surigao del Sur Using Dijkstra's Algorithm </h1>
-  <p>Click nodes on the map or use the controls to find the shortest route.</p>
+    <h1>Optimizing Waste Collection Routes in Barangay Nurcia, Lanuza, Surigao del Sur Using Dijkstra's Algorithm</h1>
+    <p>Click nodes on the map or use the sidebar to find the shortest route.</p>
 </header>
 
 <div class="app-container">
-  <div class="map-card">
-    <svg id="graph-svg" viewBox="0 0 620 440">
-      <g id="edges-layer"></g>
-      <g id="nodes-layer"></g>
-      <g id="labels-layer"></g>
-    </svg>
-  </div>
-
-  <div class="sidebar">
-    <div class="panel">
-      <div class="panel-title">Navigation Settings</div>
-      <div class="control-group">
-        <label>Starting Point</label>
-        <select id="sel-start"></select>
-      </div>
-      <div class="control-group">
-        <label>Destination</label>
-        <select id="sel-end"></select>
-      </div>
-      <button class="btn btn-primary" onclick="runDijkstra()">Find Shortest Path</button>
-      <button class="btn btn-secondary" onclick="resetViz()">Clear Map</button>
+    <div class="map-card">
+        <svg id="graph-svg" viewBox="0 0 620 440">
+            <g id="edges-layer"></g>
+            <g id="nodes-layer"></g>
+            <g id="labels-layer"></g>
+        </svg>
     </div>
 
-    <div class="panel" id="result-panel" style="display:none">
-      <div class="panel-title">Route Information</div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-val" id="res-dist">—</div>
-          <div class="stat-lbl">DISTANCE</div>
+    <div class="sidebar">
+        <div class="panel">
+            <div class="panel-title">Navigation Settings</div>
+            <div class="control-group">
+                <label>Starting Point</label>
+                <select id="sel-start"></select>
+            </div>
+            <div class="control-group">
+                <label>Destination</label>
+                <select id="sel-end"></select>
+            </div>
+            <button class="btn btn-primary" onclick="runDijkstra()">Find Shortest Path</button>
+            <button class="btn btn-secondary" onclick="resetViz()">Clear Map</button>
         </div>
-        <div class="stat-card">
-          <div class="stat-val" id="res-stops">—</div>
-          <div class="stat-lbl">TOTAL STOPS</div>
-        </div>
-      </div>
-      <div class="path-stepper" id="res-path"></div>
-    </div>
 
-    <div class="panel">
-      <div class="panel-title">Map Legend</div>
-      <div class="legend">
-        <div class="legend-item"><span class="dot" style="background:var(--purok)"></span> Purok</div>
-        <div class="legend-item"><span class="dot" style="background:var(--facility)"></span> Facility</div>
-        <div class="legend-item"><span class="dot" style="background:var(--danger)"></span> Endpoint</div>
-        <div class="legend-item"><span class="dot" style="background:var(--primary); opacity:0.3"></span> Normal</div>
-      </div>
+        <div class="panel" id="result-panel" style="display:none">
+            <div class="panel-title">Route Information</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-val" id="res-dist">—</div>
+                    <div class="stat-lbl">DISTANCE</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="res-stops">—</div>
+                    <div class="stat-lbl">STOPS</div>
+                </div>
+            </div>
+            <div class="path-stepper" id="res-path"></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Map Legend</div>
+            <div class="legend">
+                <div class="legend-item"><span class="dot" style="background:var(--purok)"></span> Purok</div>
+                <div class="legend-item"><span class="dot" style="background:var(--facility)"></span> Facility</div>
+                <div class="legend-item"><span class="dot" style="background:var(--danger)"></span> Endpoint</div>
+                <div class="legend-item"><span class="dot" style="background:var(--primary); opacity:0.3"></span> Normal</div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
-// Data remains consistent with the original logic
 const NODES = {
-  'Landfill':  {x:60,  y:380, type:'facility'},
-  'School':    {x:175, y:350, type:'facility'},
-  'P-2A':      {x:310, y:310, type:'purok'},
-  'P-1':       {x:420, y:405, type:'purok'},
-  'P-2B':      {x:280, y:210, type:'purok'},
-  'P-3B':      {x:100, y:110, type:'purok'},
-  'P-3A':      {x:490, y:80,  type:'purok'},
-  'Brgy Hall': {x:110, y:200, type:'facility'},
+    'Landfill':  {x:60,  y:380, type:'facility'},
+    'School':    {x:175, y:350, type:'facility'},
+    'P-2A':      {x:310, y:310, type:'purok'},
+    'P-1':       {x:420, y:405, type:'purok'},
+    'P-2B':      {x:280, y:210, type:'purok'},
+    'P-3B':      {x:100, y:110, type:'purok'},
+    'P-3A':      {x:490, y:80,  type:'purok'},
+    'Brgy Hall': {x:110, y:200, type:'facility'},
 };
 
+// Updated Landfill to School distance to 9500 meters (9.5km)
 const EDGES = [
-  ['Landfill','School',254.74], ['School','P-2A',26.22], ['P-2A','P-1',171.34],
-  ['P-2A','P-2B',77.89], ['P-2B','P-3B',106.70], ['P-3B','P-2B',80.51],
-  ['P-3B','P-3A',206.29], ['P-3A','P-2B',85.32], ['P-2B','P-2A',57.69],
-  ['P-3B','Brgy Hall',39.24], ['Brgy Hall','P-2B',41.27],
+    ['Landfill','School', 9500], 
+    ['School','P-2A',26.22], 
+    ['P-2A','P-1',171.34],
+    ['P-2A','P-2B',77.89], 
+    ['P-2B','P-3B',106.70], 
+    ['P-3B','P-2B',80.51],
+    ['P-3B','P-3A',206.29], 
+    ['P-3A','P-2B',85.32], 
+    ['P-2B','P-2A',57.69],
+    ['P-3B','Brgy Hall',39.24], 
+    ['Brgy Hall','P-2B',41.27],
 ];
 
 const graph = {};
 Object.keys(NODES).forEach(n => graph[n]={});
 EDGES.forEach(([a,b,w])=>{
-  graph[a][b]=(graph[a][b]||Infinity)>w?w:graph[a][b];
-  graph[b][a]=(graph[b][a]||Infinity)>w?w:graph[b][a];
+    graph[a][b]=(graph[a][b]||Infinity)>w?w:graph[a][b];
+    graph[b][a]=(graph[b][a]||Infinity)>w?w:graph[b][a];
 });
 
 function dijkstra(src,tgt){
-  const dist={},prev={},visited=new Set();
-  Object.keys(NODES).forEach(n=>dist[n]=Infinity);
-  dist[src]=0;
-  const pq=[[0,src]];
-  while(pq.length){
-    pq.sort((a,b)=>a[0]-b[0]);
-    const [d,u]=pq.shift();
-    if(visited.has(u))continue;
-    visited.add(u);
-    if(u===tgt)break;
-    for(const [v,w] of Object.entries(graph[u])){
-      const nd=d+w;
-      if(nd<dist[v]){dist[v]=nd;prev[v]=u;pq.push([nd,v]);}
+    const dist={},prev={},visited=new Set();
+    Object.keys(NODES).forEach(n=>dist[n]=Infinity);
+    dist[src]=0;
+    const pq=[[0,src]];
+    while(pq.length){
+        pq.sort((a,b)=>a[0]-b[0]);
+        const [d,u]=pq.shift();
+        if(visited.has(u))continue;
+        visited.add(u);
+        if(u===tgt)break;
+        for(const [v,w] of Object.entries(graph[u])){
+            const nd=d+w;
+            if(nd<dist[v]){dist[v]=nd;prev[v]=u;pq.push([nd,v]);}
+        }
     }
-  }
-  const path=[];
-  let cur=tgt;
-  while(cur){path.unshift(cur);cur=prev[cur];}
-  return {path,dist:dist[tgt]};
+    const path=[];
+    let cur=tgt;
+    while(cur){path.unshift(cur);cur=prev[cur];}
+    return {path,dist:dist[tgt]};
 }
 
 const SVG='http://www.w3.org/2000/svg';
@@ -276,128 +282,139 @@ const llayer=document.getElementById('labels-layer');
 let edgeEls={},nodeEls={};
 
 function drawGraph(){
-  elayer.innerHTML='';nlayer.innerHTML='';llayer.innerHTML='';
-  const drawn=new Set();
-  EDGES.forEach(([a,b,w])=>{
-    const key=[a,b].sort().join('-');
-    if(drawn.has(key))return;
-    drawn.add(key);
-    const na=NODES[a],nb=NODES[b];
-    const line=document.createElementNS(SVG,'line');
-    line.setAttribute('x1',na.x);line.setAttribute('y1',na.y);
-    line.setAttribute('x2',nb.x);line.setAttribute('y2',nb.y);
-    line.setAttribute('stroke','#e2e8f0');
-    line.setAttribute('stroke-width','4');
-    line.setAttribute('stroke-linecap','round');
-    elayer.appendChild(line);
-    edgeEls[key]=line;
-  });
+    elayer.innerHTML='';nlayer.innerHTML='';llayer.innerHTML='';
+    const drawn=new Set();
+    EDGES.forEach(([a,b,w])=>{
+        const key=[a,b].sort().join('-');
+        if(drawn.has(key))return;
+        drawn.add(key);
+        const na=NODES[a],nb=NODES[b];
+        
+        const line=document.createElementNS(SVG,'line');
+        line.setAttribute('x1',na.x);line.setAttribute('y1',na.y);
+        line.setAttribute('x2',nb.x);line.setAttribute('y2',nb.y);
+        line.setAttribute('stroke','#e2e8f0');
+        line.setAttribute('stroke-width','4');
+        line.setAttribute('stroke-linecap','round');
+        elayer.appendChild(line);
+        edgeEls[key]=line;
 
-  Object.entries(NODES).forEach(([name,{x,y,type}])=>{
-    const g=document.createElementNS(SVG,'g');
-    g.setAttribute('class', 'node-group');
-    g.onclick = () => handleNodeClick(name);
-    
-    const fill = type==='purok'?'#3b82f6':'#10b981';
-    const c=document.createElementNS(SVG,'circle');
-    c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r','16');
-    c.setAttribute('fill',fill);
-    c.setAttribute('stroke','#fff');
-    c.setAttribute('stroke-width','2');
-    g.appendChild(c);
+        const mx=(na.x+nb.x)/2,my=(na.y+nb.y)/2;
+        const t=document.createElementNS(SVG,'text');
+        t.setAttribute('x',mx);t.setAttribute('y',my-8);
+        t.setAttribute('text-anchor','middle');
+        t.setAttribute('font-size','10');
+        t.setAttribute('fill','#64748b');
+        t.setAttribute('font-weight','600');
+        t.textContent=Math.round(w)+' m';
+        llayer.appendChild(t);
+    });
 
-    const abbr=name.length<=5?name:name.slice(0,4);
-    const t=document.createElementNS(SVG,'text');
-    t.setAttribute('x',x);t.setAttribute('y',y+4);
-    t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
-    t.setAttribute('fill','#fff');t.setAttribute('font-weight','700');
-    t.textContent=abbr;
-    g.appendChild(t);
+    Object.entries(NODES).forEach(([name,{x,y,type}])=>{
+        const g=document.createElementNS(SVG,'g');
+        g.setAttribute('class', 'node-group');
+        g.onclick = () => handleNodeClick(name);
+        
+        const fill = type==='purok'?'#3b82f6':'#10b981';
+        const c=document.createElementNS(SVG,'circle');
+        c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r','16');
+        c.setAttribute('fill',fill);
+        c.setAttribute('stroke','#fff');
+        c.setAttribute('stroke-width','2');
+        g.appendChild(c);
 
-    const lbl=document.createElementNS(SVG,'text');
-    lbl.setAttribute('x',x);lbl.setAttribute('y',y-22);
-    lbl.setAttribute('text-anchor','middle');lbl.setAttribute('font-size','11');
-    lbl.setAttribute('fill','#64748b');lbl.setAttribute('font-weight','600');
-    lbl.textContent=name;
-    llayer.appendChild(lbl);
+        const abbr=name.length<=5?name:name.slice(0,4);
+        const t=document.createElementNS(SVG,'text');
+        t.setAttribute('x',x);t.setAttribute('y',y+4);
+        t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+        t.setAttribute('fill','#fff');t.setAttribute('font-weight','700');
+        t.textContent=abbr;
+        g.appendChild(t);
 
-    nlayer.appendChild(g);
-    nodeEls[name]={g,c,fill};
-  });
+        const lbl=document.createElementNS(SVG,'text');
+        lbl.setAttribute('x',x);lbl.setAttribute('y',y-22);
+        lbl.setAttribute('text-anchor','middle');lbl.setAttribute('font-size','11');
+        lbl.setAttribute('fill','#64748b');lbl.setAttribute('font-weight','600');
+        lbl.textContent=name;
+        llayer.appendChild(lbl);
+
+        nlayer.appendChild(g);
+        nodeEls[name]={g,c,fill};
+    });
 }
 
-// Interaction logic: Toggle start/end by clicking nodes
 function handleNodeClick(name) {
-  const selStart = document.getElementById('sel-start');
-  const selEnd = document.getElementById('sel-end');
-  
-  if (selStart.dataset.lastSelected === 'start') {
-    selEnd.value = name;
-    selStart.dataset.lastSelected = 'end';
-  } else {
-    selStart.value = name;
-    selStart.dataset.lastSelected = 'start';
-  }
-  runDijkstra();
+    const selStart = document.getElementById('sel-start');
+    const selEnd = document.getElementById('sel-end');
+    if (selStart.dataset.lastSelected === 'start') {
+        selEnd.value = name;
+        selStart.dataset.lastSelected = 'end';
+    } else {
+        selStart.value = name;
+        selStart.dataset.lastSelected = 'start';
+    }
+    runDijkstra();
 }
 
 function highlightPath(path,dist){
-  Object.entries(nodeEls).forEach(([name,{c,fill}])=>{
-    if(name===path[0]||name===path[path.length-1]) {
-        c.setAttribute('fill','#ef4444');
-        c.setAttribute('opacity','1');
-    } else if(path.includes(name)) {
-        c.setAttribute('fill','#6366f1');
-        c.setAttribute('opacity','1');
-    } else {
-        c.setAttribute('fill',NODES[name].type==='purok'?'#3b82f6':'#10b981');
-        c.setAttribute('opacity','0.2');
-    }
-  });
+    Object.entries(nodeEls).forEach(([name,{c,fill}])=>{
+        if(name===path[0]||name===path[path.length-1]) {
+            c.setAttribute('fill','#ef4444');
+            c.setAttribute('opacity','1');
+        } else if(path.includes(name)) {
+            c.setAttribute('fill','#6366f1');
+            c.setAttribute('opacity','1');
+        } else {
+            c.setAttribute('fill',NODES[name].type==='purok'?'#3b82f6':'#10b981');
+            c.setAttribute('opacity','0.2');
+        }
+    });
 
-  const pathKeys=new Set();
-  for(let i=0;i<path.length-1;i++) pathKeys.add([path[i],path[i+1]].sort().join('-'));
+    const pathKeys=new Set();
+    for(let i=0;i<path.length-1;i++) pathKeys.add([path[i],path[i+1]].sort().join('-'));
 
-  Object.entries(edgeEls).forEach(([key,line])=>{
-    if(pathKeys.has(key)){
-      line.setAttribute('stroke','#6366f1');
-      line.setAttribute('stroke-width','6');
-      line.setAttribute('opacity','1');
-    } else {
-      line.setAttribute('stroke','#e2e8f0');
-      line.setAttribute('opacity','0.1');
-    }
-  });
+    Object.entries(edgeEls).forEach(([key,line])=>{
+        if(pathKeys.has(key)){
+            line.setAttribute('stroke','#6366f1');
+            line.setAttribute('stroke-width','6');
+            line.setAttribute('opacity','1');
+        } else {
+            line.setAttribute('stroke','#e2e8f0');
+            line.setAttribute('opacity','0.1');
+        }
+    });
 
-  document.getElementById('result-panel').style.display='block';
-  document.getElementById('res-dist').textContent=Math.round(dist)+'m';
-  document.getElementById('res-stops').textContent=path.length;
-  document.getElementById('res-path').innerHTML=path.map(n => `<div class="step">${n}</div>`).join('');
+    document.getElementById('result-panel').style.display='block';
+    document.getElementById('res-dist').textContent=Math.round(dist)+'m';
+    document.getElementById('res-stops').textContent=path.length;
+    document.getElementById('res-path').innerHTML=path.map(n => `<div class="step">${n}</div>`).join('');
 }
 
 function runDijkstra(){
-  const src=document.getElementById('sel-start').value;
-  const tgt=document.getElementById('sel-end').value;
-  if(src===tgt) return;
-  const {path,dist}=dijkstra(src,tgt);
-  highlightPath(path,dist);
+    const src=document.getElementById('sel-start').value;
+    const tgt=document.getElementById('sel-end').value;
+    if(src===tgt) return;
+    const {path,dist}=dijkstra(src,tgt);
+    highlightPath(path,dist);
 }
 
 function resetViz(){
-  document.getElementById('result-panel').style.display='none';
-  drawGraph();
+    document.getElementById('result-panel').style.display='none';
+    drawGraph();
 }
 
 const nodes=Object.keys(NODES);
 ['sel-start','sel-end'].forEach((id,i)=>{
-  const sel=document.getElementById(id);
-  nodes.forEach(n=>{
-    const o=document.createElement('option');
-    o.value=n;o.textContent=n;
-    sel.appendChild(o);
-  });
-  sel.value=i===0?'Landfill':'P-3A';
+    const sel=document.getElementById(id);
+    nodes.forEach(n=>{
+        const o=document.createElement('option');
+        o.value=n;o.textContent=n;
+        sel.appendChild(o);
+    });
+    sel.value=i===0?'Landfill':'P-3A';
 });
 
 drawGraph();
 </script>
+</body>
+</html>
