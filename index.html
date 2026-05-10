@@ -231,30 +231,28 @@ const NODES = {
     'Brgy Hall': {x:110, y:200, type:'facility'},
 };
 
-// Updated Landfill to School distance to 9500 meters (9.5km)
+// EDGES cleaned: Duplicate weights removed to ensure calculation matches map labels.
 const EDGES = [
     ['Landfill','School', 9500], 
-    ['School','P-2A',26.22], 
-    ['P-2A','P-1',171.34],
-    ['P-2A','P-2B',77.89], 
-    ['P-2B','P-3B',106.70], 
-    ['P-3B','P-2B',80.51],
-    ['P-3B','P-3A',206.29], 
-    ['P-3A','P-2B',85.32], 
-    ['P-2B','P-2A',57.69],
-    ['P-3B','Brgy Hall',39.24], 
-    ['Brgy Hall','P-2B',41.27],
+    ['School','P-2A', 26.22], 
+    ['P-2A','P-1', 171.34],
+    ['P-2A','P-2B', 77.89], 
+    ['P-2B','P-3B', 106.70], 
+    ['P-3B','P-3A', 206.29], 
+    ['P-3A','P-2B', 85.32], 
+    ['P-3B','Brgy Hall', 39.24], 
+    ['Brgy Hall','P-2B', 41.27],
 ];
 
 const graph = {};
 Object.keys(NODES).forEach(n => graph[n]={});
 EDGES.forEach(([a,b,w])=>{
-    graph[a][b]=(graph[a][b]||Infinity)>w?w:graph[a][b];
-    graph[b][a]=(graph[b][a]||Infinity)>w?w:graph[b][a];
+    graph[a][b] = w;
+    graph[b][a] = w;
 });
 
 function dijkstra(src,tgt){
-    const dist={},prev={},visited=new Set();
+    const dist={}, prev={}, visited=new Set();
     Object.keys(NODES).forEach(n=>dist[n]=Infinity);
     dist[src]=0;
     const pq=[[0,src]];
@@ -411,7 +409,7 @@ const nodes=Object.keys(NODES);
         o.value=n;o.textContent=n;
         sel.appendChild(o);
     });
-    sel.value=i===0?'Landfill':'P-3A';
+    sel.value=i===0?'P-3B':'Landfill';
 });
 
 drawGraph();
